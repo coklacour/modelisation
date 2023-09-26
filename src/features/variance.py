@@ -6,21 +6,16 @@ import pandas as pd
 import numpy as np
 
 from sklearn.base import BaseEstimator, TransformerMixin
+from sklearn.feature_selection import VarianceThreshold
 from src.features.balance import BalanceMixin
-
-from utils.logger import get_logger
 
 ##########################################################################
 #                                 Script                                 #
 ##########################################################################
 
-LOGGER = get_logger("NearZeroVar_filter")
-
 class NearZeroVar_filter(BaseEstimator, TransformerMixin, BalanceMixin):
     """
-    Step to remove all the low variance features from the dataset. 
-    ie, identify variables that have very few unique values relative to the number of observations 
-    AND the ratio of the frequency of the most common value to the frequency of the second most common value is large
+    Step to remove all features with very frequent values and low variability from the dataset. 
     """
 
     def __init__(
@@ -82,8 +77,6 @@ class NearZeroVar_filter(BaseEstimator, TransformerMixin, BalanceMixin):
         self._cols = zero_var[zero_var.drop_ == False].index.to_list() # type: ignore
         self._removed = zero_var[zero_var.drop_ == True].index.to_list() # type: ignore
 
-        LOGGER.info("Number of variables to delete : %s", len(self._removed))
-
         return self
     
     def transform(self, X: pd.DataFrame):
@@ -92,6 +85,62 @@ class NearZeroVar_filter(BaseEstimator, TransformerMixin, BalanceMixin):
 
         Args:
             X (pd.DataFrame): the dataframe
+        """
+
+        return X[self._cols]
+   
+
+class LowVar_Filter(BaseEstimator, TransformerMixin, BalanceMixin):
+    """
+    Step to remove all features with low-variance
+    """
+
+    def __init__(
+        self, 
+        threshold: float = 0.01, 
+        equisample: bool = True
+        ):
+        """
+        Args:
+            threshold (float, optional): The minimal variance a column must have to be considered. Defaults to 0.01
+            equisample (boolean, optional): A Boolean indicating whether class balancing should be performed before correlation calculation. Defaults to True.
+        """
+
+        super().__init__()
+        self.threshold = threshold
+        self.equisample = equisample
+
+        # Placeholders
+        self._cols = []
+        self._removed = []
+
+    def get_feature_names_out(self, input_features=None):
+        return self._cols
+
+    def fit(self, X: pd.DataFrame, y=None):
+        """
+        Extract the features that we will keep
+
+        Args:
+            X (pd.DataFrame): The DataFrame to remove columns from.
+        """
+
+        if self.equisample and y is not None:
+            X, _ = self._balance(X, y)
+
+        # Eliminate features whose variance is less than self.threshold
+        selector = VarianceThreshold(threshold=self.threshold).fit(X)
+        self._cols = X.columns[selector.get_support()]
+        self._removed = list(set(X.columns) - set(self._cols))
+
+        return self
+
+    def transform(self, X: pd.DataFrame, y=None):
+        """
+        Remove features with too low a variance from the X data frame.
+
+        Args:
+            X (pd.DataFrame): The dataframe to filter columns for.
         """
 
         return X[self._cols]
