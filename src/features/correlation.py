@@ -8,13 +8,9 @@ import numpy as np
 from sklearn.base import BaseEstimator, TransformerMixin
 from src.features.balance import BalanceMixin
 
-from utils.logger import get_logger
-
 ##########################################################################
 #                                 Script                                 #
 ##########################################################################
-
-LOGGER = get_logger("HighCorrelation_filter")
 
 class HighCorrelation_filter(BaseEstimator, TransformerMixin, BalanceMixin):
     """
@@ -45,7 +41,7 @@ class HighCorrelation_filter(BaseEstimator, TransformerMixin, BalanceMixin):
     
     def fit(self, X: pd.DataFrame, y: np.ndarray = None):
         """
-        Extract the features that we will keep. Only consider the 'float' columns.
+        Extract the features that we will keep.
 
         Args:
             X (pd.DataFrame): the dataframe to remove the too correlated features form
@@ -64,8 +60,6 @@ class HighCorrelation_filter(BaseEstimator, TransformerMixin, BalanceMixin):
         to_remove = tuple(c for c in U.columns if any(U[c] > self.threshold))
         self._cols = [c for c in X.columns if c not in to_remove]
         self._removed = [c for c in X.columns if c in to_remove]
-
-        LOGGER.info("Number of variables to delete : %s", len(self._removed))
         
         return self
     
