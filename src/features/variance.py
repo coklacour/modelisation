@@ -95,7 +95,6 @@ class LowVar_Filter(BaseEstimator, TransformerMixin, BalanceMixin):
     Step to remove all features with low-variance
     """
 
-
     def __init__(
         self, 
         threshold: float = 0.01, 
