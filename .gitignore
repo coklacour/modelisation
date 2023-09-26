@@ -2,6 +2,7 @@ data/external
 data/interim
 data/processed
 data/raw
+reports/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
