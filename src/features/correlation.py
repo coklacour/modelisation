@@ -5,16 +5,29 @@
 import pandas as pd
 import numpy as np
 
+import datapane as dp
+
 from sklearn.base import BaseEstimator, TransformerMixin
 from src.features.balance import BalanceMixin
+from utils.reportable import ReportableAbstract
 
 ##########################################################################
 #                                 Script                                 #
 ##########################################################################
 
-class HighCorrelation_filter(BaseEstimator, TransformerMixin, BalanceMixin):
+class HighCorrelation_filter(BaseEstimator, TransformerMixin, BalanceMixin, ReportableAbstract):
     """
     Step to remove highly correlated features from the dataset.
+    """
+
+    GROUP_NAME = "High-Correlation filter"
+
+    _HEADER = """
+    ## High Correlation filter
+
+    _Remove features that exhibit a high degree of linear correlation with other features before the models training._
+
+    ### List of removed variables
     """
 
     def __init__(
@@ -72,3 +85,25 @@ class HighCorrelation_filter(BaseEstimator, TransformerMixin, BalanceMixin):
         """
 
         return X[self._cols]
+    
+    def get_report_group(self):
+        """
+        Generate a Datapane report group to describe the HighCorrelation filter step.
+
+        Returns:
+            dp.Group: The group to be wrapped in the report.
+        """
+
+        return dp.Group(
+            self._HEADER,
+            dp.Group(
+                dp.BigNumber(
+                    heading="Number of removed variables",
+                    value=f"{len(self._removed)}",
+                ),
+                dp.BigNumber(
+                    heading="Number of keeped variables", value=f"{len(self._cols)}"
+                ),
+                columns=2,
+            ),
+        )

@@ -5,17 +5,30 @@
 import pandas as pd
 import numpy as np
 
+import datapane as dp
+
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.feature_selection import VarianceThreshold
 from src.features.balance import BalanceMixin
+from utils.reportable import ReportableAbstract
 
 ##########################################################################
 #                                 Script                                 #
 ##########################################################################
 
-class NearZeroVar_filter(BaseEstimator, TransformerMixin, BalanceMixin):
+class NearZeroVar_filter(BaseEstimator, TransformerMixin, BalanceMixin, ReportableAbstract):
     """
     Step to remove all features with very frequent values and low variability from the dataset. 
+    """
+
+    GROUP_NAME = "Near-Zero-Variance filter"
+
+    _HEADER = """
+    ## Near-Zero-Variance filter
+
+    _Removes uninformative columns before training the model, based on the number of possible values observed. Works with both quantitative and qualitative variables_
+
+    ### Details of the selection procedure
     """
 
     def __init__(
@@ -88,11 +101,43 @@ class NearZeroVar_filter(BaseEstimator, TransformerMixin, BalanceMixin):
         """
 
         return X[self._cols]
+    
+    def get_report_group(self):
+        """
+        Generates a Datapane report group to describe the Near-Zero-Variance filtering step.
+
+        Returns:
+            dp.Group: The group to be wrapped in the report.
+        """
+
+        return dp.Group(
+            self._HEADER,
+            dp.Group(
+                dp.BigNumber(
+                    heading="Number of removed variables",
+                    value=f"{len(self._removed)}",
+                ),
+                dp.BigNumber(
+                    heading="Number of keeped variables", value=f"{len(self._cols)}"
+                ),
+                columns=2,
+            ),
+        )
    
 
-class LowVar_Filter(BaseEstimator, TransformerMixin, BalanceMixin):
+class LowVar_Filter(BaseEstimator, TransformerMixin, BalanceMixin, ReportableAbstract):
     """
     Step to remove all features with low-variance
+    """
+
+    GROUP_NAME = "Low Variance filter"
+
+    _HEADER = """
+    ## Low variance filter
+
+    _Removes uninformative columns before training the model, based on too low a variance._
+
+    ### Details of the selection procedure
     """
 
     def __init__(
@@ -144,3 +189,25 @@ class LowVar_Filter(BaseEstimator, TransformerMixin, BalanceMixin):
         """
 
         return X[self._cols]
+
+    def get_report_group(self):
+        """
+        Generates a Datapane report group to describe the low-variance filtering step.
+
+        Returns:
+            dp.Group: The group to be wrapped in the report.
+        """
+
+        return dp.Group(
+            self._HEADER,
+            dp.Group(
+                dp.BigNumber(
+                    heading="Number of removed variables",
+                    value=f"{len(self._removed)}",
+                ),
+                dp.BigNumber(
+                    heading="Number of keeped variables", value=f"{len(self._cols)}"
+                ),
+                columns=2,
+            ),
+        )
