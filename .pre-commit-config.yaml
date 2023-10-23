@@ -9,6 +9,8 @@ repos:
     rev: v2.0.0
     hooks:
       - id: flake8
+        args:
+        - --ignore=E501  # line too long
   - repo: https://github.com/kynan/nbstripout
     rev: 0.6.1
     hooks:
