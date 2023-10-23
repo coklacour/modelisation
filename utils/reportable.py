@@ -2,7 +2,7 @@
 #                                 Packages                                  #
 #############################################################################
 
-from datapane import Group, Text
+from datapane import Group
 from abc import ABCMeta, abstractmethod
 
 #############################################################################

@@ -12,6 +12,7 @@ from sklearn.utils import resample
 #                                 Script                                 #
 ##########################################################################
 
+
 class BalanceMixin:
     """
     Removing a portion of the observations of the majority class to prevent its signal from dominating
@@ -19,11 +20,10 @@ class BalanceMixin:
 
     def __init__(self):
         super().__init__()
- 
+
     def _balance(
-        self, 
-        X: pd.DataFrame, 
-        y: np.ndarray) -> Tuple[pd.DataFrame, np.ndarray]:
+        self, X: pd.DataFrame, y: np.ndarray
+    ) -> Tuple[pd.DataFrame, np.ndarray]:
         """
         Rebalance an X dataframe by undersampling the majority class
 

@@ -15,7 +15,10 @@ from utils.reportable import ReportableAbstract
 #                                 Script                                 #
 ##########################################################################
 
-class HighCorrelation_filter(BaseEstimator, TransformerMixin, BalanceMixin, ReportableAbstract):
+
+class HighCorrelation_filter(
+    BaseEstimator, TransformerMixin, BalanceMixin, ReportableAbstract
+):
     """
     Step to remove highly correlated features from the dataset.
     """
@@ -34,7 +37,7 @@ class HighCorrelation_filter(BaseEstimator, TransformerMixin, BalanceMixin, Repo
         self,
         threshold: float = 0.95,
         equisample: bool = True,
-        ):
+    ):
         """
         Args:
             threshold (float, optional): correlation threshold above which features are considered highly correlated. Defaults to 0.95
@@ -51,7 +54,7 @@ class HighCorrelation_filter(BaseEstimator, TransformerMixin, BalanceMixin, Repo
 
     def get_feature_names_out(self, input_features=None):
         return self._cols
-    
+
     def fit(self, X: pd.DataFrame, y: np.ndarray = None):
         """
         Extract the features that we will keep.
@@ -73,11 +76,11 @@ class HighCorrelation_filter(BaseEstimator, TransformerMixin, BalanceMixin, Repo
         to_remove = tuple(c for c in U.columns if any(U[c] > self.threshold))
         self._cols = [c for c in X.columns if c not in to_remove]
         self._removed = [c for c in X.columns if c in to_remove]
-        
+
         return self
-    
+
     def transform(self, X: pd.DataFrame):
-        """ 
+        """
         Remove the too-correlated features from the X dataframe.
 
         Args:
@@ -85,7 +88,7 @@ class HighCorrelation_filter(BaseEstimator, TransformerMixin, BalanceMixin, Repo
         """
 
         return X[self._cols]
-    
+
     def get_report_group(self):
         """
         Generate a Datapane report group to describe the HighCorrelation filter step.
