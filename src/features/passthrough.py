@@ -31,7 +31,7 @@ class Passthrough(BaseEstimator, TransformerMixin):
 
     def get_feature_names_out(self, input_features=None):
         return self._cols
-    
+
     def fit(self, X: pd.DataFrame, y: np.ndarray = None):
         """
         Extract the features that we will keep
@@ -44,7 +44,7 @@ class Passthrough(BaseEstimator, TransformerMixin):
         self._cols = X.columns.tolist()
 
         return self
-    
+
     def transform(self, X: pd.DataFrame):
         """
         Args:
