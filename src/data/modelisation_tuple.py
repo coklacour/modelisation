@@ -1,5 +1,8 @@
-from dataclasses import dataclass     # https://docs.python.org/fr/3/library/dataclasses.html
+from dataclasses import (
+    dataclass,
+)  # https://docs.python.org/fr/3/library/dataclasses.html
 import pandas as pd
+
 
 @dataclass
 class modelisationTuple:

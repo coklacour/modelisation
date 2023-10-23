@@ -1,4 +1,4 @@
-##########################################################################
+# noq##########################################################################
 #                                Packages                                #
 ##########################################################################
 
@@ -16,9 +16,12 @@ from utils.reportable import ReportableAbstract
 #                                 Script                                 #
 ##########################################################################
 
-class NearZeroVar_filter(BaseEstimator, TransformerMixin, BalanceMixin, ReportableAbstract):
+
+class NearZeroVar_filter(
+    BaseEstimator, TransformerMixin, BalanceMixin, ReportableAbstract
+):
     """
-    Step to remove all features with very frequent values and low variability from the dataset. 
+    Step to remove all features with very frequent values and low variability from the dataset.
     """
 
     GROUP_NAME = "Near-Zero-Variance filter"
@@ -33,10 +36,10 @@ class NearZeroVar_filter(BaseEstimator, TransformerMixin, BalanceMixin, Reportab
 
     def __init__(
         self,
-        frequency_ratio: float = 95/5,
+        frequency_ratio: float = 95 / 5,
         unique_cut: float = 0.05,
         equisample: bool = True,
-        ):
+    ):
         """
         Args:
             frequency_ratio (float, optional): The cutoff for the ratio of the most common value to the second most common value. Defaults to 95/5
@@ -55,7 +58,7 @@ class NearZeroVar_filter(BaseEstimator, TransformerMixin, BalanceMixin, Reportab
 
     def get_feature_names_out(self, input_features=None):
         return self._cols
-    
+
     def fit(self, X: pd.DataFrame, y: np.ndarray = None):
         """
         Extract the features that we will keep
@@ -79,21 +82,21 @@ class NearZeroVar_filter(BaseEstimator, TransformerMixin, BalanceMixin, Reportab
             try:
                 F, S = serie.value_counts().iloc[0:2]
             except ValueError:
-                return True # ie, the variable doesn't
+                return True  # ie, the variable doesn't
 
-            return F/S >= self.frequency_ratio
+            return F / S >= self.frequency_ratio
 
-        unique_cut = lambda x: len(x.unique()) / len(x) < self.unique_cut
+        unique_cut = lambda x: len(x.unique()) / len(x) < self.unique_cut  # noqa: E731
 
         # Remove the NZV
         zero_var = pd.Series(X.apply(_freq_cut) & X.apply(unique_cut)).to_frame("drop_")
-        self._cols = zero_var[zero_var.drop_ == False].index.to_list() # type: ignore
-        self._removed = zero_var[zero_var.drop_ == True].index.to_list() # type: ignore
+        self._cols = zero_var[zero_var.drop_ is False].index.to_list()  # type: ignore
+        self._removed = zero_var[zero_var.drop_ is True].index.to_list()  # type: ignore
 
         return self
-    
+
     def transform(self, X: pd.DataFrame):
-        """ 
+        """
         Remove the near zero variance features from the X dataframe.
 
         Args:
@@ -101,7 +104,7 @@ class NearZeroVar_filter(BaseEstimator, TransformerMixin, BalanceMixin, Reportab
         """
 
         return X[self._cols]
-    
+
     def get_report_group(self):
         """
         Generates a Datapane report group to describe the Near-Zero-Variance filtering step.
@@ -123,7 +126,7 @@ class NearZeroVar_filter(BaseEstimator, TransformerMixin, BalanceMixin, Reportab
                 columns=2,
             ),
         )
-   
+
 
 class LowVar_Filter(BaseEstimator, TransformerMixin, BalanceMixin, ReportableAbstract):
     """
@@ -140,11 +143,7 @@ class LowVar_Filter(BaseEstimator, TransformerMixin, BalanceMixin, ReportableAbs
     ### Details of the selection procedure
     """
 
-    def __init__(
-        self, 
-        threshold: float = 0.01, 
-        equisample: bool = True
-        ):
+    def __init__(self, threshold: float = 0.01, equisample: bool = True):
         """
         Args:
             threshold (float, optional): The minimal variance a column must have to be considered. Defaults to 0.01
@@ -170,7 +169,7 @@ class LowVar_Filter(BaseEstimator, TransformerMixin, BalanceMixin, ReportableAbs
             X (pd.DataFrame): The DataFrame to remove columns from.
         """
 
-        if self.equisample and y is not None:
+        if self.equisample is True and y is not None:
             X, _ = self._balance(X, y)
 
         # Eliminate features whose variance is less than self.threshold
