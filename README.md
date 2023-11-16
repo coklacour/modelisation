@@ -45,7 +45,6 @@ To start this magnificent project, I propose the following structure (https://dr
     │   │
     │   ├── features       <- Scripts to turn raw data into features for modeling
     │   │
-    │   ├── models         <- Scripts to train models and then use trained models to make
-    │   │   │                 predictions
+    │   ├── models         <- Scripts to train models and then use trained models to make predictions
     │   │
     │   └── visualization  <- Scripts to create exploratory and results oriented visualizations
