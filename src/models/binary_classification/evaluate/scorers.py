@@ -39,10 +39,10 @@ def _scorer_aucpr_non_degenerated(estimator, X, y, scoring_weight_f1: float = 0)
 
     # Compute both of the f1 score
     max_f1_0 = metric_pr_f_beta(1 - y, y_hat_both[:, 0], beta=1)
-    max_f1_1 = metric_pr_f_beta(y, y_hat_both[:, 1])
+    max_f1_1 = metric_pr_f_beta(y, y_hat_both[:, 1], beta=1)
 
     # Check that both f1 score are semi-definite
-    is_nan = np.isnan(max_f1_0) or np.isnan(max_f1_1, beta=1)
+    is_nan = np.isnan(max_f1_0) or np.isnan(max_f1_1)
     is_zeroes = max_f1_0 == 0 or max_f1_1 == 0
     if is_nan or is_zeroes:
         raise _DegeneratedF1Error()
