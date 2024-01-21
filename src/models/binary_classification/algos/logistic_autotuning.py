@@ -114,7 +114,7 @@ class LogisticAutoTuning(BaseEstimator, ClassifierMixin):
         self.optim_metric_strategy = optim_metric_strategy
 
         # Placeholder
-        self._fitted_model = None
+        self._is_fitted = None
         self._threshold = None
         self._model = None
 
@@ -149,7 +149,7 @@ class LogisticAutoTuning(BaseEstimator, ClassifierMixin):
         # Obtain the threshold for the best f1 score
         probs = self._model.predict_proba(X)[:, 1]
         _, threshold = get_threshold_best_pr_fbeta(y, probs)
-        self.threshold = threshold
+        self._threshold = threshold
 
         # Toogle fit indicator
         self._is_fitted = True
@@ -168,7 +168,7 @@ class LogisticAutoTuning(BaseEstimator, ClassifierMixin):
             X (pd.DataFrame): The new set of data to run the prediction on.
         """
 
-        return self.predict_proba(X)[:, 1] > self.threshold
+        return self.predict_proba(X)[:, 1] > self._threshold
 
     def predict_proba(self, X: pd.DataFrame):
         """
