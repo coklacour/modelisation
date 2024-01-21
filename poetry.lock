@@ -1096,6 +1096,26 @@ optional = false
 python-versions = ">=3.7"
 
 [[package]]
+name = "xgboost"
+version = "2.0.3"
+description = "XGBoost Python Package"
+category = "main"
+optional = false
+python-versions = ">=3.8"
+
+[package.dependencies]
+numpy = "*"
+scipy = "*"
+
+[package.extras]
+dask = ["dask", "distributed", "pandas"]
+datatable = ["datatable"]
+pandas = ["pandas"]
+plotting = ["graphviz", "matplotlib"]
+pyspark = ["cloudpickle", "pyspark", "scikit-learn"]
+scikit-learn = ["scikit-learn"]
+
+[[package]]
 name = "zipp"
 version = "3.16.2"
 description = "Backport of pathlib-compatible object wrapper for zip files"
@@ -1110,7 +1130,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-ena
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "2c4662ae55dc1fc4a9c1ed34b9f6afe4c310885f34cb9faa5324735168e593c2"
+content-hash = "4906dbf909c86ce7543691c61b9bab4f70f0fcdc2f46a6a07e608b57627b0303"
 
 [metadata.files]
 alembic = []
@@ -1302,4 +1322,5 @@ vega-datasets = [
 virtualenv = []
 wcwidth = []
 widgetsnbextension = []
+xgboost = []
 zipp = []
