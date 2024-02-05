@@ -20,7 +20,6 @@ poetry install
 To start this magnificent project, I propose the following structure (https://drivendata.github.io/cookiecutter-data-science/):
 
     .
-    ├── README.md          <- The top-level README for developers using this project.
     ├── data
     │   ├── external       <- Data from third party sources.
     │   ├── interim        <- Intermediate data that has been transformed.
@@ -37,6 +36,7 @@ To start this magnificent project, I propose the following structure (https://dr
     │            
     ├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
     │   └── figures        <- Generated graphics and figures to be used in reporting
+    │   └── html           <- Generated HTMLs to be used in reporting
     │
     ├── src                <- Source code for use in this project.
     │   ├── __init__.py    <- Makes src a Python module
@@ -45,6 +45,9 @@ To start this magnificent project, I propose the following structure (https://dr
     │   │
     │   ├── features       <- Scripts to turn raw data into features for modeling
     │   │
-    │   ├── models         <- Scripts to train models and then use trained models to make predictions
+    │   ├── models         <- Scripts to train models and then use trained models to make predictions    
+    │   │
     │   │
     │   └── visualization  <- Scripts to create exploratory and results oriented visualizations
+    ├── utils              <- Scripts utility that are used throughout several parts of the project
+    ├── README.md          <- The top-level README for developers using this project.
