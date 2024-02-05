@@ -90,8 +90,8 @@ class NearZeroVar_filter(
 
         # Remove the NZV
         zero_var = pd.Series(X.apply(_freq_cut) & X.apply(unique_cut)).to_frame("drop_")
-        self._cols = zero_var[zero_var.drop_ is False].index.to_list()  # type: ignore
-        self._removed = zero_var[zero_var.drop_ is True].index.to_list()  # type: ignore
+        self._cols = zero_var.loc[~zero_var["drop_"]].index.to_list()
+        self._removed = zero_var.loc[zero_var["drop_"]].index.to_list()
 
         return self
 
