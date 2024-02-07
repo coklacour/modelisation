@@ -1,6 +1,6 @@
 ## Configuration guidelines
 
-### Python environement
+### Python environment
 
 * to facilitate collaboration, I've integrated the Poetry tool. Poetry is a dependency management and packaging tool in Python. for more info https://python-poetry.org/docs/
 
