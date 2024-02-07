@@ -49,5 +49,6 @@ To start this magnificent project, I propose the following structure (https://dr
     │   │
     │   │
     │   └── visualization  <- Scripts to create exploratory and results oriented visualizations
+    │
     ├── utils              <- Scripts utility that are used throughout several parts of the project
     ├── README.md          <- The top-level README for developers using this project.
